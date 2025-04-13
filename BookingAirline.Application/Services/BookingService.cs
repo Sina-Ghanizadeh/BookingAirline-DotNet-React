@@ -3,7 +3,7 @@ using BookingAirline.Domain.Models;
 
 namespace BookingAirline.Application.Services;
 
-internal class BookingService : IBookingService
+public class BookingService : IBookingService
 {
     private List<Flight> _flights;
     public BookingService()
