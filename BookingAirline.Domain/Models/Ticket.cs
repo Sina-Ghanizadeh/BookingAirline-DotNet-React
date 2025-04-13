@@ -2,14 +2,14 @@
 
 public class Ticket
 {
-    public string TicketNumber { get; set; }
+    public Guid TicketNumber { get; set; }
     public Passenger Passenger { get; set; }
     public Flight Flight { get; set; }
     public string SeatNumber { get; set; }
 
-    public Ticket(string ticketNumber, Passenger passenger, Flight flight, string seatNumber)
+    public Ticket(Passenger passenger, Flight flight, string seatNumber)
     {
-        TicketNumber = ticketNumber;
+        TicketNumber = Guid.NewGuid();
         Passenger = passenger;
         Flight = flight;
         SeatNumber = seatNumber;

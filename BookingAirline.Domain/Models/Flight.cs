@@ -28,7 +28,7 @@ public class Flight
     public void GetFlightDetails()
     {
         Console.WriteLine($"Flight Number: {FlightNumber}");
-        Console.WriteLine($"From: {DestinationAirport} To: {DestinationAirport}");
+        Console.WriteLine($"From: {DepartureAirport} To: {DestinationAirport}");
         Console.WriteLine($"Departure Time: {DepartureTime}, Arrival Time: {ArrivalTime}");
         Console.WriteLine($"Available Seats: {AvailableSeats}/{Capacity}");
         Console.WriteLine($"Ticket Price: {TicketPrice:C}");
@@ -49,5 +49,12 @@ public class Flight
         {
             Console.WriteLine("No available seats.");
         }
+    }
+
+    public void CancelTicket(Ticket ticket)
+    {
+        Tickets.Remove(ticket);
+        AvailableSeats++;
+        ticket.Passenger.Tickets.Remove(ticket);
     }
 }
