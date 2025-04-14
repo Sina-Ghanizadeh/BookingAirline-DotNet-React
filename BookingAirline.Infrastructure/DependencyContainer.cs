@@ -8,6 +8,6 @@ public static class DependencyContainer
 {
     public static void RegisterServices(this IServiceCollection services)
     {
-        services.AddScoped<IBookingService, BookingService>();
+        services.AddSingleton<IBookingService, BookingService>();
     }
 }
