@@ -5,7 +5,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(opt => {
+//Cors
+const string _corsPolicyName = "MyDefaultPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(_corsPolicyName, builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -22,7 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors(_corsPolicyName);
 app.UseAuthorization();
 
 app.MapControllers();
