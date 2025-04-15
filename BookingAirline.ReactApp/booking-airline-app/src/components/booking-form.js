@@ -1,6 +1,7 @@
-import React,{useState} from "react";
+import React,{ useState} from "react";
 import '../styles/style.css';
 import { bookFlight } from "../services/booking-api";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const randomSeatNumber = () => {
     //TODO: Read From Server
@@ -15,6 +16,7 @@ const BookingForm = ({ flight }) => {
 const [passengerName, setPassengerName] = useState('');
 const [passengerEmail, setPassengerEmail] = useState('');
 const [passengerPhoneNumber, setPassengerPhone] = useState('');
+const { getAccessTokenSilently } = useAuth0();
 
 const handleBooking = async (e) => {
     e.preventDefault();
@@ -25,8 +27,11 @@ const handleBooking = async (e) => {
         passengerPhoneNumber,
         seatNumber : randomSeatNumber(),
     };
+    const accessToken = await getAccessTokenSilently({
+        audience: "https://booking-airline-api.example.com",
+    });
     try {
-        const response = await bookFlight(bookingRequest);
+        const response = await bookFlight(bookingRequest,accessToken);
         console.log('Booking successful:', response.data);
     } catch (error) {
         console.error('Error during booking:', error);

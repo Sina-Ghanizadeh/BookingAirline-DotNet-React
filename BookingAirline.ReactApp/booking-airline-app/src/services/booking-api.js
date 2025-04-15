@@ -19,11 +19,12 @@ export const searchFlights = async (departureAirport,destinationAirport, date) =
   }
 }
 
-export const bookFlight = async (bookFlightRequest) => {
+export const bookFlight = async (bookFlightRequest,accessToken) => {
     try {
         const response = await axios.post(`${API_BASE_URL}Booking/book`, bookFlightRequest, {
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
         },
         });
         return response;
