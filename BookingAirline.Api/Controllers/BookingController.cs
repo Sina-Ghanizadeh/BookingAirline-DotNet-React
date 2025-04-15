@@ -1,6 +1,7 @@
 ﻿using BookingAirline.Api.Dtos;
 using BookingAirline.Application.Interfaces;
 using BookingAirline.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingAirline.Api.Controllers;
@@ -25,6 +26,7 @@ public class BookingController : ControllerBase
         return Ok(flights);
     }
     [HttpPost("book")]
+    [Authorize]
     public async Task<IActionResult> BookFlight([FromBody] BookFlightRequestDto requestDto)
     {
         var passenger = new Passenger(requestDto.PassengerName, requestDto.PassengerPhoneNumber, requestDto.PassengerEmail);

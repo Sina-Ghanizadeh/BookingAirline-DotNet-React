@@ -1,4 +1,7 @@
 using BookingAirline.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +14,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(_corsPolicyName, builder =>
     {
-        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        builder.WithOrigins("http://localhost:3002")
+        .WithHeaders(
+        [
+            HeaderNames.ContentType,
+            HeaderNames.Authorization
+        ]);
     });
 });
 
@@ -21,10 +29,23 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.RegisterServices();
 builder.Services.AddSwaggerGen();
+builder.Services.RegisterServices();
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+    }).AddJwtBearer(options =>
+    {
+        options.Authority = "https://dev-ht2q3y0t06uj5efk.us.auth0.com/";
+        options.Audience = "https://booking-airline-api.example.com";
+    });
 
 var app = builder.Build();
+
+app.UseCors(_corsPolicyName);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -33,7 +54,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(_corsPolicyName);
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
